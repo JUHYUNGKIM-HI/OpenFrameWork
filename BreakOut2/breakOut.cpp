@@ -27,7 +27,7 @@ void initGame(){
     // 0은 벽돌이 없음.
     for(int i = 0; i < 5; i++)
     {
-        for(int j = 0; j <32; j++)
+        for(int j = 0; j <16; j++)
         {
             game.bricks[i][j] = 1;
         }
@@ -43,7 +43,7 @@ void drawBrick(){
     ofFill();
     for(int i = 0; i < 5; i++)
     {
-        for(int j = 0; j < 32; j++)
+        for(int j = 0; j < 16; j++)
         {
             if(game.bricks[i][j] == 1)
             {
@@ -60,7 +60,7 @@ void drawBrick(){
     ofSetColor(ofColor :: black);
     for(int i = 0; i < 5; i++)
     {
-        for(int j = 0; j < 32; j++)
+        for(int j = 0; j < 16; j++)
         {
             if(game.bricks[i][j] == 1)
             {
@@ -102,26 +102,25 @@ void drawBall(){
 // 공의 좌표가 x, y축 각각 좌우 또는 상하 경계에 부딪히면 공이 움직이는 방향에
 // -1를 곱해서 방향을 바꾼다.
 void bounceBall(){
-    if(game.ballX > ofGetWidth() || game.ballX < 0)
+    if(game.ballX < BALLRADIUS || game.ballX > ofGetWidth() - BALLRADIUS)
         game.ballDirX *= -1;
-    if(game.ballY > ofGetHeight() || game.ballY < 0)
+    if(game.ballY < BALLRADIUS)
         game.ballDirY *= -1;
     
     // 아래 부분 공이 라켓에 충돌하는지를 체크하는 부분
-    if(game.ballY > ofGetHeight())
-        game.ballDirY *= -1;
+    if(game.ballY > ofGetHeight() - BALLRADIUS) game.ballDirY *= -1;
     else if(game.ballY > game.padY - BALLRADIUS &&
             game.ballX >= game.padX - game.padWidth / 2 &&
-            game.ballX <= game.padX + game.padWidth /2){
+            game.ballX <= game.padX + game.padWidth / 2){
         game.ballDirY *= -1;
     }
     
     // 공의 현재 위치 x, y를 각각 벽돌의 폭과 높이로 정수형 나눗셈을 하면
     // 해당하는 벽돌의 행과 열 번호를 알 수 있다.
-    if(game.ballY < BRICKHEIGHT * 5 + BALLRADIUS){
+    if(game.ballY < BRICKHEIGHT * 5){
         if(game.bricks[game.ballY / BRICKHEIGHT][game.ballX / BRICKWIDTH] == 1){
             game.bricks[game.ballY / BRICKHEIGHT][game.ballX / BRICKWIDTH] = 0;
             game.ballDirY *= -1;
         }
     }
-}ㅃ
+}
